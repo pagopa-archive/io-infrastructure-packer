@@ -1,0 +1,11 @@
+---
+
+- name: Install base packages using Yum
+  yum:
+    name:
+      - git
+      - ipa-client
+      - ntp
+      - sssd
+      - vim
+    state: present

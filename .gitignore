@@ -1,0 +1,9 @@
+**/*.DS_Store
+ansible/roles/ansible-os-hardening/
+ansible/roles/ansible-ssh-hardening/
+ansible/roles/ansible-freeipa/*
+!ansible/roles/ansible-freeipa/ansible-freeipa/
+ansible/roles/ansible-freeipa/ansible-freeipa/*
+!ansible/roles/ansible-freeipa/ansible-freeipa/install-server.yml
+blaet.openvpn
+**/*.pem

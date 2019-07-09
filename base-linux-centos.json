@@ -1,0 +1,57 @@
+{
+  "variables": {
+    "subscription_id": "{{env `SUBSCRIPTION`}}",
+    "client_id": "{{env `PACKER_SP_ID`}}",
+    "client_secret": "{{env `PACKER_SP_SECRET`}}",
+    "resource_group": "{{env `RG_NAME`}}",
+    "defult_admin_user": "{{ env `DEFAULT_ADMIN_USER`}}"
+  },
+  "sensitive-variables": [
+    "subscription_id",
+    "client_id",
+    "client_secret",
+    "resource_group"
+  ],
+  "builders": [{
+    "type": "azure-arm",
+    "async_resourcegroup_delete" : true,
+
+    "subscription_id": "{{user `subscription_id`}}",
+    "client_id": "{{user `client_id`}}",
+    "client_secret": "{{user `client_secret`}}",
+
+    "managed_image_name": "base-linux-centos-0.1",
+    "managed_image_resource_group_name": "io-infra",
+
+    "ssh_username": "{{user `defult_admin_user`}}",
+
+    "os_type": "Linux",
+    "image_publisher": "OpenLogic",
+    "image_offer": "CentOS",
+    "image_sku": "7.5",
+    "image_version": "latest",
+
+    "location": "West Europe",
+    "vm_size": "Standard_A2_v2"
+  }],
+  "provisioners": [
+    {
+      "type": "shell-local",
+      "inline": [
+        "ansible-galaxy install --force --roles-path ansible/roles -r ansible/base-linux-requirements.yml"
+      ]
+    },
+    {
+      "type": "ansible",
+      "playbook_file": "ansible/base-linux.yml"
+    },
+    {
+      "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'",
+      "inline": [
+        "/usr/sbin/waagent -force -deprovision+user && export HISTSIZE=0 && sync"
+      ],
+      "inline_shebang": "/bin/sh -x",
+      "type": "shell"
+    }
+  ]
+}

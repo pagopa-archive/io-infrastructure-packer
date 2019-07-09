@@ -1,0 +1,33 @@
+---
+
+- name: Ensure IPv6 is enabled for all interfaces
+  sysctl:
+    name: net.ipv6.conf.all.disable_ipv6
+    value: 0
+    sysctl_set: yes
+    state: present
+    reload: yes
+
+- name: Ensure IPv6 is disabled by default
+  sysctl:
+    name: net.ipv6.conf.default.disable_ipv6
+    value: 0
+    sysctl_set: yes
+    state: present
+    reload: yes
+
+- name: Ensure IPv6 is explicitely enabled for lo
+  sysctl:
+    name: net.ipv6.conf.lo.disable_ipv6
+    value: 0
+    sysctl_set: yes
+    state: present
+    reload: yes
+
+- name: Ensure IPv6 is explicitely enabled for eth0
+  sysctl:
+    name: net.ipv6.conf.eth0.disable_ipv6
+    value: 0
+    sysctl_set: yes
+    state: present
+    reload: yes

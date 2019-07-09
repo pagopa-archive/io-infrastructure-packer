@@ -1,0 +1,31 @@
+---
+
+- hosts: all
+  become: yes
+  become_method: sudo
+  roles:
+    - update-installed-packages
+    - install-base-packages
+    - role: ansible-os-hardening
+      vars:
+        os_auth_allow_homeless: true
+        ufw_default_input_policy: 'ACCEPT'
+        os_unused_filesystems:
+          - "cramfs"
+          - "freevxfs"
+          - "jffs2"
+          - "hfs"
+          - "hfsplus"
+          - "squashfs"
+          - "vfat"
+        sysctl_overwrite:
+          # By default, disable interface specific IPv6
+          net.ipv6.conf.lo.disable_ipv6: 1
+          net.ipv6.conf.eth0.disable_ipv6: 1
+    - role: ansible-ssh-hardening
+      vars:
+        ssh_compression: true
+        ssh_use_pam: true
+        ssh_max_auth_retries: 5
+        sftp_enabled: true
+    - user-auth

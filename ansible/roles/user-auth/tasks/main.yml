@@ -1,0 +1,13 @@
+---
+
+- name: Set user password
+  user:
+    name: "{{ lookup('env', 'DEFAULT_ADMIN_USER') }}"
+    state: present
+    password: "{{ lookup('env', 'DEFAULT_ADMIN_PASS') }} | password_hash('sha512') "
+
+- name: Make sure the admin user is unlocked
+  user:
+    name: "{{ lookup('env', 'DEFAULT_ADMIN_USER') }}"
+    password_lock: no
+    expires: -1

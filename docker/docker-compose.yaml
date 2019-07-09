@@ -1,0 +1,19 @@
+version: '2'
+
+services:
+# The Ubuntu container used in the CI/CD environment
+  cicd:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: io-cicd
+    image: teamdigitale/io-infrastructure-packer
+    working_dir: /io-infrastructure-packer
+    environment:
+      - "RG_NAME=${RG_NAME}"
+      - "SUBSCRIPTION=${SUBSCRIPTION}"
+      - "PACKER_SP_ID=${PACKER_SP_ID}"
+      - "PACKER_SP_SECRET=${PACKER_SP_SECRET}"
+    volumes:
+      - ./../../:/io-infrastructure-packer
+    tty: true

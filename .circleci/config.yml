@@ -1,0 +1,13 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: teamdigitale/io-infrastructure-packer:latest
+        user: teamdigitale
+    steps:
+      - checkout
+      - run:
+          name: Build images
+          command: |
+            python helpers/templates_to_build.py
+          no_output_timeout: 1h
